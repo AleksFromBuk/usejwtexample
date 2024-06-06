@@ -3,6 +3,7 @@ package com.t1.task4.usejwtexample.security.jwt;
 import com.t1.task4.usejwtexample.exception.TokenParseException;
 import com.t1.task4.usejwtexample.security.AppUserPrincipal;
 import io.jsonwebtoken.*;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +37,12 @@ public class TokenService {
     @Value("${user-service.jwt.tokenExpiration}")
     private Duration tokenExpiration;
 
+    @PostConstruct
+    protected void init() {
+        jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
+    }
+
+
     public String generateToken(String username, String id, List<String> roles) {
         return Jwts.builder()
                 .setSubject(username)
@@ -42,7 +50,7 @@ public class TokenService {
                 .setExpiration(new Date((new Date()).getTime() + tokenExpiration.toMillis()))
                 .claim(ROLE_CLAIM, roles)
                 .claim(ID_CLAIM, id)
-                .signWith(SignatureAlgorithm.ES512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }
 
