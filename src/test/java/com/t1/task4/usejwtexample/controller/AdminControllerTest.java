@@ -21,16 +21,16 @@ public class AdminControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(roles = "USER") // Прокси пользователь с ролью USER
+    @WithMockUser(roles = "USER")
     public void test_admin_endpoint_returns_403_for_non_admin() throws Exception {
-        mockMvc.perform(get("/admin")) // Выполняем GET-запрос к /admin
-                .andExpect(status().isForbidden()); // Ожидаем статус 403 (Forbidden)
+        mockMvc.perform(get("/admin"))
+                .andExpect(status().isForbidden());
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN") // Прокси администратора с ролью ADMIN
+    @WithMockUser(roles = "ADMIN")
     public void test_admin_endpoint_returns_admin_for_role_admin() throws Exception {
-        mockMvc.perform(get("/admin")) // Выполняем GET-запрос к /admin
-                .andExpect(status().isOk()); // Ожидаем статус 200 (OK), так как администратор имеет доступ к этому эндпоинту
+        mockMvc.perform(get("/admin"))
+                .andExpect(status().isOk());
     }
 }
