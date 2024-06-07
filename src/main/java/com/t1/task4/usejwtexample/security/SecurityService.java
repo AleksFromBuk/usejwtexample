@@ -41,7 +41,7 @@ public class SecurityService {
             log.error("Exception trying to check refresh token for user {}", refreshTokenValue);
             throw new RefreshTokenException("Invalid refresh token");
         }
-        Optional<User> user = userService.findById(refreshToken.get().getId());
+        Optional<User> user = userService.findById(refreshToken.get().getUserId());
         return createTokenData(user.get());
     }
 
